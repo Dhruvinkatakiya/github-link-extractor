@@ -1,12 +1,10 @@
-// app/validate/page.tsx
+
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
-import Footer from "../components/Footer";
 import Navbar2 from "../components/Navbar2";
 
-/* ---------- Types ---------- */
+
 type GhUser = {
     login: string;
     name: string | null;
@@ -21,6 +19,10 @@ type GhUser = {
     followers: number;
     following: number;
     public_repos: number;
+    linkedin?: string | null;
+    instagram?: string | null;
+    leetcode?: string | null;
+    codeforces?: string | null;
 };
 type GhRepo = {
     id: number;
@@ -43,9 +45,9 @@ type GhEvent = {
 };
 type LangBytes = Record<string, number>;
 
-/* ---------- Theme ---------- */
+
 const T = {
-    page: "bg-[#F7F3EB]", // NOTE: your requested page background
+    page: "bg-[#F7F3EB]",
     card: "bg-white",
     border: "border-[#E8E3DA]",
     h: "text-[#3E3A37]",
@@ -54,7 +56,7 @@ const T = {
     accentBg: "bg-[#6F625A]",
 };
 
-/* ---------- Helpers ---------- */
+
 const apiHeaders = (): HeadersInit => {
     const h: HeadersInit = {
         Accept: "application/vnd.github+json",
@@ -96,7 +98,6 @@ function timeAgo(date: string) {
 }
 const fmt = (n?: number | null) => (n ?? 0) >= 1000 ? `${((n ?? 0) / 1000).toFixed(1)}k` : `${n ?? 0}`;
 
-/* ---------- GraphQL (optional; needs token) ---------- */
 async function fetchTotalContributions(login: string): Promise<number | null> {
     const token = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
     if (!token) return null;
@@ -114,7 +115,7 @@ async function fetchTotalContributions(login: string): Promise<number | null> {
     return j?.data?.user?.contributionsCollection?.contributionCalendar?.totalContributions ?? null;
 }
 
-/* ---------- Page ---------- */
+
 export default function ValidatePage() {
     const [rawLinks, setRawLinks] = useState<string[] | null>(null);
     const [loading, setLoading] = useState(true);
@@ -212,10 +213,8 @@ export default function ValidatePage() {
             }
         };
         load();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [rawLinks]);
 
-    // rate limit helper (only for message)
     useEffect(() => {
         const check = async () => {
             try {
@@ -285,13 +284,63 @@ export default function ValidatePage() {
                 )}
 
                 {loading && (
-                    <div className={`${T.card} border ${T.border} rounded-2xl p-6`}>
-                        <div className="flex items-center gap-2">
-                            <span className="inline-flex h-5 w-5 rounded-full border-2 border-[#C9C3BA] border-t-[#6F625A] animate-spin" />
-                            <span className={`${T.p}`}>Fetching GitHub data…</span>
-                        </div>
+                    <div className="animate-pulse">
+                        {usernames.length === 0 ? (
+                            <div className={`${T.card} border ${T.border} rounded-2xl p-6`}>
+                                <div className="flex items-center gap-2">
+                                    <span className="inline-flex h-5 w-5 rounded-full border-2 border-[#C9C3BA] border-t-[#6F625A] animate-spin" />
+                                    <span className={`${T.p}`}>Fetching GitHub data…</span>
+                                </div>
+                            </div>
+                        ) : (
+                            usernames.map((u) => (
+                                <section key={u} className="mb-12">
+                                    <div className="grid lg:grid-cols-3 gap-6">
+                                        {/* Profile Skeleton */}
+                                        <div className={`${T.card} border ${T.border} rounded-4xl p-6`}>
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-20 h-20 rounded-full bg-[#EDE8DF]" />
+                                                <div className="flex-1 space-y-2">
+                                                    <div className="h-4 w-40 bg-[#EDE8DF] rounded" />
+                                                    <div className="h-3 w-24 bg-[#EDE8DF] rounded" />
+                                                </div>
+                                            </div>
+                                            <div className="mt-4 space-y-2">
+                                                <div className="h-3 w-full bg-[#EDE8DF] rounded" />
+                                                <div className="h-3 w-5/6 bg-[#EDE8DF] rounded" />
+                                            </div>
+                                        </div>
+
+                                        {/* Recent Activity Skeleton */}
+                                        <div className={`lg:col-span-2 ${T.card} border ${T.border} rounded-2xl p-6`}>
+                                            <div className="h-4 w-48 bg-[#EDE8DF] rounded mb-4" />
+                                            <div className="space-y-3">
+                                                {[...Array(3)].map((_, i) => (
+                                                    <div key={i} className="h-14 bg-[#F2EDE5] rounded-xl" />
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Repo Grid Skeleton */}
+                                    <div className="mt-8">
+                                        <div className="h-4 w-32 bg-[#EDE8DF] rounded mb-3" />
+                                        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
+                                            {[...Array(6)].map((_, i) => (
+                                                <div key={i} className={`${T.card} border ${T.border} rounded-2xl p-4`}>
+                                                    <div className="h-4 w-32 bg-[#EDE8DF] rounded mb-3" />
+                                                    <div className="h-3 w-full bg-[#EDE8DF] rounded mb-2" />
+                                                    <div className="h-3 w-2/3 bg-[#EDE8DF] rounded" />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </section>
+                            ))
+                        )}
                     </div>
                 )}
+
 
                 {!loading && usernames.length === 0 && (
                     <div className={`${T.card} border ${T.border} rounded-2xl p-6`}>
@@ -339,23 +388,112 @@ export default function ValidatePage() {
                                                 {user?.company && <p className={`${T.p}`}>🏢 {user.company}</p>}
                                             </div>
 
-                                            {/* Socials */}
-                                            <div className="mt-5 grid grid-cols-3 gap-2 text-center">
-                                                <a href={user?.blog || "#"} target="_blank" rel="noreferrer"
-                                                    className={`rounded-xl ${T.page} border ${T.border} p-3 ${!user?.blog ? "pointer-events-none opacity-50" : ""}`}>
-                                                    <div className={`${T.accentText} font-semibold truncate`}>Website</div>
-                                                    <div className="text-[11px] text-[#9B958D]">Blog/Portfolio</div>
-                                                </a>
-                                                <a href={user?.twitter_username ? `https://x.com/${user.twitter_username}` : "#"} target="_blank" rel="noreferrer"
-                                                    className={`rounded-xl ${T.page} border ${T.border} p-3 ${!user?.twitter_username ? "pointer-events-none opacity-50" : ""}`}>
-                                                    <div className={`${T.accentText} font-semibold`}>X / Twitter</div>
-                                                    <div className="text-[11px] text-[#9B958D]">@{user?.twitter_username || "—"}</div>
-                                                </a>
-                                                <div className={`rounded-xl ${T.page} border ${T.border} p-3`}>
-                                                    <div className={`${T.accentText} font-semibold`}>Email</div>
-                                                    <div className="text-[11px] text-[#9B958D] truncate">{user?.email || "—"}</div>
-                                                </div>
+                                            {/* Contact & Social Links — Auto Show Only Available */}
+                                            <div className="mt-4 flex flex-wrap gap-3">
+                                                {/* Website */}
+                                                {user?.blog && (
+                                                    <a
+                                                        href={user.blog}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="flex-1 min-w-[180px] flex items-center justify-between rounded-2xl p-4 border border-[#E8E3DA] bg-[#F9F6F0] hover:shadow-md hover:-translate-y-[1px] transition-all duration-200"
+                                                    >
+                                                        <p className="text-[15px] font-semibold text-[#3E3A37]">Website</p>
+                                                        <p className="text-[15px] font-medium text-[#3E3A37] truncate max-w-[200px] text-right">
+                                                            {user.blog.replace(/^https?:\/\//, "")}
+                                                        </p>
+                                                    </a>
+                                                )}
+
+                                                {/* Twitter */}
+                                                {user?.twitter_username && (
+                                                    <a
+                                                        href={`https://twitter.com/${user.twitter_username}`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="flex-1 min-w-[160px] flex items-center justify-between rounded-2xl p-4 border border-[#E8E3DA] bg-[#F9F6F0] hover:shadow-md hover:-translate-y-[1px] transition-all duration-200"
+                                                    >
+                                                        <p className="text-[15px] font-semibold text-[#3E3A37]">Twitter</p>
+                                                        <p className="text-[15px] font-medium text-[#3E3A37]">@{user.twitter_username}</p>
+                                                    </a>
+                                                )}
+
+                                                {/* Email */}
+                                                {user?.email && (
+                                                    <a
+                                                        href={`mailto:${user.email}`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="flex-1 min-w-[180px] flex items-center justify-between rounded-2xl p-4 border border-[#E8E3DA] bg-[#F9F6F0] hover:shadow-md hover:-translate-y-[1px] transition-all duration-200"
+                                                    >
+                                                        <p className="text-[15px] font-semibold text-[#3E3A37]">Email</p>
+                                                        <p className="text-[15px] font-medium text-[#3E3A37] truncate max-w-[140px] text-right">
+                                                            {user.email}
+                                                        </p>
+                                                    </a>
+                                                )}
+
+                                                {/* LinkedIn */}
+                                                {user?.linkedin && (
+                                                    <a
+                                                        href={user.linkedin}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="flex-1 min-w-[180px] flex items-center justify-between rounded-2xl p-4 border border-[#E8E3DA] bg-[#F9F6F0] hover:shadow-md hover:-translate-y-[1px] transition-all duration-200"
+                                                    >
+                                                        <p className="text-[15px] font-semibold text-[#3E3A37]">LinkedIn</p>
+                                                        <p className="text-[15px] font-medium text-[#3E3A37] truncate max-w-[120px] text-right">
+                                                            {user.linkedin.replace(/^https?:\/\//, "")}
+                                                        </p>
+                                                    </a>
+                                                )}
+
+                                                {/* Instagram */}
+                                                {user?.instagram && (
+                                                    <a
+                                                        href={user.instagram}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="flex-1 min-w-[160px] flex items-center justify-between rounded-2xl p-4 border border-[#E8E3DA] bg-[#F9F6F0] hover:shadow-md hover:-translate-y-[1px] transition-all duration-200"
+                                                    >
+                                                        <p className="text-[15px] font-semibold text-[#3E3A37]">Instagram</p>
+                                                        <p className="text-[15px] font-medium text-[#3E3A37] truncate max-w-[120px] text-right">
+                                                            @{user.instagram.split("/").pop()}
+                                                        </p>
+                                                    </a>
+                                                )}
+
+                                                {/* LeetCode */}
+                                                {user?.leetcode && (
+                                                    <a
+                                                        href={user.leetcode}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="flex-1 min-w-[180px] flex items-center justify-between rounded-2xl p-4 border border-[#E8E3DA] bg-[#F9F6F0] hover:shadow-md hover:-translate-y-[1px] transition-all duration-200"
+                                                    >
+                                                        <p className="text-[15px] font-semibold text-[#3E3A37]">LeetCode</p>
+                                                        <p className="text-[15px] font-medium text-[#3E3A37] truncate max-w-[120px] text-right">
+                                                            {user.leetcode.replace(/^https?:\/\//, "")}
+                                                        </p>
+                                                    </a>
+                                                )}
+
+                                                {/* Codeforces */}
+                                                {user?.codeforces && (
+                                                    <a
+                                                        href={user.codeforces}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="flex-1 min-w-[180px] flex items-center justify-between rounded-2xl p-4 border border-[#E8E3DA] bg-[#F9F6F0] hover:shadow-md hover:-translate-y-[1px] transition-all duration-200"
+                                                    >
+                                                        <p className="text-[15px] font-semibold text-[#3E3A37]">Codeforces</p>
+                                                        <p className="text-[15px] font-medium text-[#3E3A37] truncate max-w-[120px] text-right">
+                                                            {user.codeforces.replace(/^https?:\/\//, "")}
+                                                        </p>
+                                                    </a>
+                                                )}
                                             </div>
+
 
                                             {/* Stats */}
                                             <div className="mt-5 grid grid-cols-3 gap-2 text-center">
@@ -495,7 +633,7 @@ export default function ValidatePage() {
                     </>
                 )}
             </div>
-            <Footer />
+
         </div>
     );
 }

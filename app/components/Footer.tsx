@@ -90,10 +90,10 @@ export default function Footer() {
             © {new Date().getFullYear()} GitInsight. All rights reserved.
           </p>
           <div className="flex items-center gap-6 text-sm">
-            <Link href="/privacy" className={`${T.text} hover:${T.hoverText} transition-colors duration-200`}>
+            <Link href="" className={`${T.text} hover:${T.hoverText} transition-colors duration-200`}>
               Privacy Policy
             </Link>
-            <Link href="/terms" className={`${T.text} hover:${T.hoverText} transition-colors duration-200`}>
+            <Link href="" className={`${T.text} hover:${T.hoverText} transition-colors duration-200`}>
               Terms of Service
             </Link>
           </div>

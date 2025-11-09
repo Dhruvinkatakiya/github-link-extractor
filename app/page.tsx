@@ -31,7 +31,7 @@ export default function UploadResume() {
   const finishAndGoValidate = (linksArr: string[]) => {
     try {
       sessionStorage.setItem("gh_links", JSON.stringify(linksArr));
-    } catch {}
+    } catch { }
     setGithubLinks(linksArr);
     if (linksArr.length > 0) router.push("/validate");
   };
@@ -109,7 +109,7 @@ export default function UploadResume() {
       }
 
       setNotification({
-        message: `Found ${arr.length} GitHub ${arr.length === 1 ? "link" : "links"}`,
+        message: `Found  GitHub ${arr.length === 1 ? "link" : "links"}`,
         type: "success",
       });
 
@@ -147,16 +147,23 @@ export default function UploadResume() {
         />
       )}
 
-      <main id="home" className="container mx-auto px-4 py-16 flex-grow relative">
+      <main id="home" className="container mx-auto px-4 py-34 flex-grow relative">
         <div className="max-w-4xl mx-auto text-center mb-12">
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-[#3E3A37]">
-            Discover Developer Stories
-            <span className="block mt-2 text-[#6F625A]">
-              Through GitHub Links
+
+
+          <h1 className="text-5xl text-[#3E3A37] sm:text-6xl font-extrabold leading-tight">
+            <span className="bg-clip-text text-transparent bg-gradient-to-l from-[#6F625A] to-[#3E3A37]">  Discover Developer Stories{" "}</span>
+
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#6F625A] to-[#3E3A37]">
+              Beyond the Resume
             </span>
           </h1>
+
+
+
+
           <p className="mt-6 text-lg text-[#7B756E] max-w-2xl mx-auto">
-            Upload a resume and instantly reveal the developer's GitHub journey -
+            Upload a resume and instantly reveal the developer&apos;s GitHub journey -
             from passion projects to open source contributions.
           </p>
         </div>
@@ -173,11 +180,10 @@ export default function UploadResume() {
               onDrop={onDrop}
               className={`relative block rounded-xl border-2 border-dashed transition-all duration-300 
                          p-10 cursor-pointer group
-                         ${
-                           dragActive
-                             ? "border-[#6F625A] bg-[#F7F3EB]"
-                             : "border-[#E8E3DA] hover:border-[#6F625A] hover:bg-[#F7F3EB]"
-                         }`}
+                         ${dragActive
+                  ? "border-[#6F625A] bg-[#F7F3EB]"
+                  : "border-[#E8E3DA] hover:border-[#6F625A] hover:bg-[#F7F3EB]"
+                }`}
             >
               <input
                 id="file-upload"
@@ -191,11 +197,10 @@ export default function UploadResume() {
                 <div
                   className={`w-16 h-16 rounded-xl flex items-center justify-center mb-4 
                                 transition-colors duration-300
-                                ${
-                                  dragActive
-                                    ? "bg-[#6F625A]"
-                                    : "bg-[#F7F3EB] group-hover:bg-[#6F625A]"
-                                }`}
+                                ${dragActive
+                      ? "bg-[#6F625A]"
+                      : "bg-[#F7F3EB] group-hover:bg-[#6F625A]"
+                    }`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -207,7 +212,9 @@ export default function UploadResume() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="icon icon-tabler icons-tabler-outline icon-tabler-cloud-upload"
+                    role="img"
+                    aria-label="upload icon"
+                    className="icon icon-tabler icons-tabler-outline icon-tabler-cloud-upload text-[#6F625A] group-hover:text-white transition-colors duration-200"
                   >
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                     <path d="M7 18a4.6 4.4 0 0 1 0 -9a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-1" />
@@ -247,7 +254,7 @@ export default function UploadResume() {
           </div>
         </div>
 
-     
+
       </main>
 
       <div id="how-it-works">

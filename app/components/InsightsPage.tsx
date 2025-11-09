@@ -77,7 +77,7 @@ export default function InsightsPage() {
                   src={demo.avatar}
                   alt={demo.name}
                   fill
-                  className="rounded-2xl object-cover shadow-md ring-1 ring-[#E8E3DA]"
+                  className="rounded-2xl  object-cover shadow-md ring-1 ring-[#E8E3DA]"
                   sizes="64px"
                   priority
                 />

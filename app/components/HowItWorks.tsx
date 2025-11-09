@@ -15,7 +15,7 @@ const itemVariants = {
   show: {
     opacity: 1,
     y: 0,
-    transition: { type: "spring", stiffness: 80, damping: 18 },
+    transition: { type: "spring" as const, stiffness: 80, damping: 18 },
   },
 };
 
@@ -48,7 +48,7 @@ export default function HowItWorks() {
     {
       id: 2,
       title: "Smart Analysis",
-      subtitle: "AI-Powered",
+      subtitle: "Scanning Resumes",
       description:
         "Our AI scans GitHub activity, repositories, and contributions for insights.",
       icon: (
@@ -111,29 +111,44 @@ export default function HowItWorks() {
         viewport={{ once: true, margin: "-80px" }}
         variants={containerVariants}
       >
-        {/* Header */}
-        <motion.div className="text-center mb-20" variants={itemVariants}>
-          <span className="inline-block px-4 py-1 rounded-full bg-[#6F625A]/10 text-[#6F625A] text-sm font-medium mb-4">
+              {/* Header */}
+        <motion.div 
+          className="text-center mb-20" 
+          variants={itemVariants}
+        >
+          <motion.span 
+            className="inline-block px-4 py-1.5 rounded-full bg-[#6F625A]/10 text-[#6F625A] text-sm font-medium mb-4"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+          >
             How It Works
-          </span>
-          <h2 className="text-3xl md:text-4xl font-bold text-[#3E3A37] mb-4 leading-snug">
+          </motion.span>
+          
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#3E3A37] mb-6 leading-tight">
             Simple Steps to{" "}
-            <span className="text-[#6F625A]">Developer Insights</span>
+            <span className="text-[#6F625A] relative">
+              Developer Insights
+              
+            </span>
           </h2>
-          <p className="text-[#7B756E] text-base md:text-lg max-w-2xl mx-auto">
-            Turn resumes into meaningful developer profiles with AI-driven
-            GitHub analytics.
+          
+          <p className="text-[#7B756E] text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+            Transform resumes into comprehensive developer profiles with 
+            advanced GitHub repository analysis and contribution insights.
           </p>
+        
+          
         </motion.div>
 
         {/* Steps */}
-        <motion.div
-          className="relative grid sm:grid-cols-2 md:grid-cols-3 gap-12 md:gap-10"
+               <motion.div
+          className="relative grid sm:grid-cols-2 md:grid-cols-3 gap-14 md:gap-12 max-w-5xl mx-auto"
           variants={containerVariants}
         >
           {/* connecting dashed line */}
-          <div className="hidden md:block absolute top-[47px] left-[15%] right-[15%] border-t-2 border-dashed border-[#DAD2C8] z-0"></div>
-
+          <div className="hidden md:block absolute top-[60px] left-[15%] right-[15%] border-t-2 border-dashed border-[#DAD2C8] z-0"></div>
+        
           {steps.map((step, index) => (
             <motion.div
               key={step.id}
@@ -141,25 +156,28 @@ export default function HowItWorks() {
               variants={itemVariants}
             >
               <div
-                className="relative w-24 h-24 mx-auto mb-6 rounded-2xl bg-white border border-[#EAE4DB]
-                flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-300"
+                className="relative w-28 h-28 mx-auto mb-8 rounded-2xl bg-white border border-[#EAE4DB]
+                flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-300
+                hover:scale-105 hover:-translate-y-1"
               >
                 <div
-                  className="absolute -top-2 -right-2 w-7 h-7 rounded-lg bg-[#6F625A]
-                  text-white text-xs font-semibold flex items-center justify-center"
+                  className="absolute -top-2 -right-2 w-8 h-8 rounded-xl bg-[#6F625A]
+                  text-white text-sm font-semibold flex items-center justify-center"
                 >
                   {index + 1}
                 </div>
-                {step.icon}
+                <div className="scale-125">
+                  {step.icon}
+                </div>
               </div>
-
-              <h3 className="text-xl font-semibold text-[#3E3A37] mb-1">
+        
+              <h3 className="text-2xl font-semibold text-[#3E3A37] mb-2">
                 {step.title}
               </h3>
-              <p className="text-[#6F625A] text-sm font-medium mb-2">
+              <p className="text-[#6F625A] text-base font-medium mb-3">
                 {step.subtitle}
               </p>
-              <p className="text-[#7B756E] text-sm leading-relaxed max-w-xs mx-auto">
+              <p className="text-[#7B756E] text-base leading-relaxed max-w-sm mx-auto">
                 {step.description}
               </p>
             </motion.div>
