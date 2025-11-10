@@ -173,9 +173,6 @@ git push origin feature/amazing-feature
 - Test on multiple devices/browsers
 - Update documentation as needed
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
