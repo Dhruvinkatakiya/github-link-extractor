@@ -17,7 +17,7 @@ GitInsight is a powerful web application that extracts and analyzes GitHub profi
 - **Social Links**: Automatic detection and display of LinkedIn, Twitter, email, and other profiles
 
 ### 🧠 Smart Insights
-- **AI-Powered Analysis**: Intelligent assessment of development patterns and expertise
+- **Smart Analysis**: Intelligent assessment of development patterns and expertise
 - **Repository Filtering**: Advanced filtering by language, type (sources/forks/archived), and sorting options
 - **Activity Timeline**: Recent GitHub events and contributions
 - **Contribution Calendar**: Total contributions with optional GitHub token for exact data
